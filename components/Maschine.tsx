@@ -22,7 +22,7 @@ export const Maschine = ({ start, dauer, nummer }: Maschine) => {
     const restMinuten = Math.floor(restZeit / 1000 / 60).toString().padStart(2, "0")
     const restSekunden = Math.floor(restZeit / 1000 % 60).toString().padStart(2, "0")
     const laufend = restZeit > 0
-    const endeZeit = new Date(ende).toLocaleTimeString().slice(0, -3)
+    const endeZeit = new Date(ende).toLocaleTimeString("de-DE", { timeZone: "Europe/Berlin" }).slice(0, -3)
 
     return (
         <div className={`p-3 rounded shadow-lg ${laufend ? "bg-red-300" : "bg-green-300"}`}>
