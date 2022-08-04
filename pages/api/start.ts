@@ -15,24 +15,18 @@ export default async function handler(
     return;
   }
 
-  const { nummer, start, dauer } = JSON.parse(req.body);
+  const { nummer, start, dauer, gebaeude } = JSON.parse(req.body);
 
   const client = await clientPromise;
 
-  const collection = client.db("wannmaschinefrei").collection("maschinen");
+  const collection = client.db("wannmaschinefrei").collection("maschinen2");
 
-  await collection.updateOne(
-    { "_id": nummer },
-    {
-      $set: {
-        start,
-        dauer,
-      },
-    },
-    { upsert: true },
-  );
+  collection.insertOne({
+    nummer,
+    start,
+    dauer,
+    gebaeude,
+  });
 
-  console.dir(req.body);
-  console.log(nummer, start, dauer);
   res.end();
 }

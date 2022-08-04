@@ -8,14 +8,31 @@ interface props {
 }
 
 const Home: NextPage<props> = ({ maschinen }) => {
+  const maschinenB = maschinen?.filter(maschine =>
+    maschine.gebaeude == "b"
+  )
+
+  const maschinenD = maschinen?.filter(maschine =>
+    maschine.gebaeude == "d"
+  )
+
   return (
     <>
       <Head>
         <title>Wann Maschine frei?</title>
       </Head>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-1">
+      {maschinenB.length > 0 && <div className="p-3">Gebäude B</div>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
         {
-          maschinen?.map(maschine =>
+          maschinenB?.map(maschine =>
+            <Maschine key={maschine.nummer} {...maschine} />
+          )
+        }
+      </div>
+      {maschinenD.length > 0 && <div className="p-3">Gebäude D</div>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
+        {
+          maschinenD?.map(maschine =>
             <Maschine key={maschine.nummer} {...maschine} />
           )
         }
@@ -26,27 +43,53 @@ const Home: NextPage<props> = ({ maschinen }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   const client = await clientPromise;
-  const collection = client.db("wannmaschinefrei").collection("maschinen");
+  const collection = client.db("wannmaschinefrei").collection("maschinen2");
 
-  const maschinen = await collection.find({}, {
-    sort: {
-      _id: 1
-    },
-    projection: {
-      _id: 0,
-      nummer: "$_id",
-      start: 1,
-      dauer: 1
+  const agg = [
+    {
+      '$sort': {
+        'start': -1
+      }
+    }, {
+      '$addFields': {
+        'nummerAsString': {
+          '$toString': '$nummer'
+        }
+      }
+    }, {
+      '$group': {
+        '_id': {
+          '$concat': [
+            '$gebaeude', '$nummerAsString'
+          ]
+        },
+        'nummer': {
+          '$first': '$nummer'
+        },
+        'start': {
+          '$first': '$start'
+        },
+        'dauer': {
+          '$first': '$dauer'
+        },
+        'gebaeude': {
+          '$first': '$gebaeude'
+        }
+      }
+    }, {
+      '$sort': {
+        'nummer': 1
+      }
     }
-  }).toArray()
+  ]
 
-  console.log(maschinen)
+  const maschinen = await collection.aggregate(agg).toArray()
 
   return {
     props: {
       maschinen
     },
-    revalidate: 60
+    revalidate: 1
   }
 }
 

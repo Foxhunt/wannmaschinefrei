@@ -4,9 +4,10 @@ export interface Maschine {
     nummer: number;
     start: number
     dauer: number
+    gebaeude: string
 }
 
-export const Maschine = ({ start, dauer, nummer }: Maschine) => {
+export const Maschine = ({ start, dauer, nummer, gebaeude }: Maschine) => {
     const [startWert, setStartWert] = useState(start);
     const [dauerWert, setDauerWert] = useState(dauer);
     const ende = startWert + dauerWert * 60 * 1000;
@@ -39,27 +40,6 @@ export const Maschine = ({ start, dauer, nummer }: Maschine) => {
                         </span>
                 }
             </p>
-            {/* <p className="flex justify-between">
-                <span>{laufend ? "fertig in" : "ist fertig seit " + new Date(ende).toLocaleTimeString().slice(0, -3)}</span>
-                {
-                    laufend &&
-                    <span>
-                        {minuten.toString().padStart(2, "0")}:{sekunden.toString().padStart(2, "0")}
-                    </span>
-                }
-            </p> */}
-            {/* <p className="flex justify-between">
-                <span>Start</span>
-                <span>{laufend ? new Date(startWert).toLocaleTimeString().slice(0, -3) : "-"}</span>
-            </p> */}
-            {/* <p className="flex justify-between">
-                <span>Ende</span>
-                <span>{laufend ? new Date(ende).toLocaleTimeString().slice(0, -3) : "-"}</span>
-            </p> */}
-            {/* <p className="flex justify-between">
-                <span>Dauer</span>
-                <span>{dauerWert} Minuten</span>
-            </p> */}
             <form
                 className="flex gap-1 mt-2 h-8"
                 onSubmit={
@@ -70,6 +50,7 @@ export const Maschine = ({ start, dauer, nummer }: Maschine) => {
                             {
                                 body: JSON.stringify({
                                     nummer,
+                                    gebaeude,
                                     start: Number(Date.now()),
                                     dauer: event.currentTarget.dauer?.valueAsNumber || 0
                                 }),
