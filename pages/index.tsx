@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { Maschine } from '../components/Maschine';
 import clientPromise from '../lib/mongodb';
@@ -41,7 +41,7 @@ const Home: NextPage<props> = ({ maschinen }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
   const collection = client.db("wannmaschinefrei").collection("maschinen2");
 
@@ -88,8 +88,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       maschinen
-    },
-    revalidate: 1
+    }
   }
 }
 
