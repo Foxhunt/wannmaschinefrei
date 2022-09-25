@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { Maschine } from '../components/Maschine';
 import clientPromise from '../lib/mongodb';
 
+const NEXT_PUBLIC_MONGODB_COLLECTION_NAME = process.env.NEXT_PUBLIC_MONGODB_COLLECTION_NAME
+
 interface props {
   maschinen: Maschine[]
 }
@@ -43,7 +45,7 @@ const Home: NextPage<props> = ({ maschinen }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
-  const collection = client.db("wannmaschinefrei").collection("maschinen2");
+  const collection = client.db("wannmaschinefrei").collection(NEXT_PUBLIC_MONGODB_COLLECTION_NAME);
 
   const agg = [
     {

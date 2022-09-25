@@ -2,6 +2,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../lib/mongodb";
 
+const NEXT_PUBLIC_MONGODB_COLLECTION_NAME =
+  process.env.NEXT_PUBLIC_MONGODB_COLLECTION_NAME;
+
 type Data = {
   name: string;
 };
@@ -19,7 +22,9 @@ export default async function handler(
 
   const client = await clientPromise;
 
-  const collection = client.db("wannmaschinefrei").collection("maschinen2");
+  const collection = client.db("wannmaschinefrei").collection(
+    NEXT_PUBLIC_MONGODB_COLLECTION_NAME,
+  );
 
   collection.insertOne({
     nummer,
