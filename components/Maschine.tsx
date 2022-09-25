@@ -5,20 +5,24 @@ export interface Maschine {
     start: number
     dauer: number
     gebaeude: string
+    voll: boolean
 }
 
-export const Maschine = ({ start, dauer, nummer, gebaeude }: Maschine) => {
+export const Maschine = ({ start, dauer, nummer, gebaeude, voll }: Maschine) => {
     const [startWert, setStartWert] = useState(start);
     const [dauerWert, setDauerWert] = useState(dauer);
     const ende = startWert + dauerWert * 60 * 1000;
     const [restZeit, setRestZeit] = useState(ende - Date.now());
+    const [vollWert, setVollWert] = useState(voll);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setRestZeit(ende - Date.now());
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [ende]);
+        if (restZeit > 0) {
+            const interval = setInterval(() => {
+                setRestZeit(ende - Date.now());
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [ende, restZeit]);
 
     const restMinuten = Math.floor(restZeit / 1000 / 60).toString().padStart(2, "0")
     const restSekunden = Math.floor(restZeit / 1000 % 60).toString().padStart(2, "0")
@@ -26,7 +30,7 @@ export const Maschine = ({ start, dauer, nummer, gebaeude }: Maschine) => {
     const endeZeit = new Date(ende).toLocaleTimeString("de-DE", { timeZone: "Europe/Berlin" }).slice(0, -3)
 
     return (
-        <div className={`p-3 rounded shadow-lg ${laufend ? "bg-red-300" : "bg-green-300"}`}>
+        <div className={`p-3 rounded shadow-lg ${laufend || vollWert ? "bg-red-300" : "bg-green-300"}`}>
             <p>
                 <span>Maschine {nummer} </span>
                 {
@@ -36,7 +40,7 @@ export const Maschine = ({ start, dauer, nummer, gebaeude }: Maschine) => {
                         </span>
                         :
                         <span>
-                            ist fertig seit {endeZeit}.
+                            ist {vollWert ? "fertig" : "leer"} seit {endeZeit}{vollWert && ", aber noch voll"}.
                         </span>
                 }
             </p>
@@ -52,6 +56,7 @@ export const Maschine = ({ start, dauer, nummer, gebaeude }: Maschine) => {
                                     nummer,
                                     gebaeude,
                                     start: Number(Date.now()),
+                                    voll: !vollWert,
                                     dauer: event.currentTarget.dauer?.valueAsNumber || 0
                                 }),
                                 method: "POST"
@@ -61,22 +66,22 @@ export const Maschine = ({ start, dauer, nummer, gebaeude }: Maschine) => {
                         setStartWert(Date.now())
                         setDauerWert(event.currentTarget.dauer?.value || 0)
                         setRestZeit((Date.now() + event.currentTarget.dauer?.value * 60 * 1000) - Date.now());
+                        setVollWert(!vollWert)
                         event.currentTarget.reset()
                     }}>
-                {!laufend && <input
+                {!laufend && !vollWert && <input
                     disabled={laufend}
                     className="grow rounded-lg text-center focus:outline-gray-300"
                     type="number"
                     name="dauer"
-                    step={5}
                     min={0}
                     max={100}
                     defaultValue={laufend ? "" : 60}
                     placeholder="Dauer" />}
                 <button
-                    className={`grow rounded-lg ${laufend ? "bg-red-500" : "bg-blue-300"}`}
+                    className={`grow rounded-lg ${laufend || vollWert ? "bg-red-500" : "bg-blue-300"}`}
                     type="submit">
-                    {laufend ? "stop" : "start"}
+                    {laufend ? "stop" : vollWert ? "leer" : "start"}
                 </button>
             </form>
         </div >
