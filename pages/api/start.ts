@@ -23,7 +23,7 @@ export default async function handler(
   const client = await clientPromise;
 
   const collection = client.db("wannmaschinefrei").collection(
-    NEXT_PUBLIC_MONGODB_COLLECTION_NAME,
+    NEXT_PUBLIC_MONGODB_COLLECTION_NAME!,
   );
 
   collection.insertOne({

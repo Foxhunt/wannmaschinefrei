@@ -45,7 +45,7 @@ const Home: NextPage<props> = ({ maschinen }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
-  const collection = client.db("wannmaschinefrei").collection(NEXT_PUBLIC_MONGODB_COLLECTION_NAME);
+  const collection = client.db("wannmaschinefrei").collection(NEXT_PUBLIC_MONGODB_COLLECTION_NAME!);
 
   const agg = [
     {
