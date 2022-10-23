@@ -39,6 +39,13 @@ const Home: NextPage<props> = ({ maschinen }) => {
           )
         }
       </div>
+      <div className="place-content-center">
+        <a
+          href="mailto:marco@mojica.de?subject=Feedback wannmaschinefrei"
+          className="text-center text-gray-500 text-xs">
+          Fragen? Ideen? Schreib mir!
+        </a>
+      </div>
     </>
   )
 }
