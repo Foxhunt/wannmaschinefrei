@@ -81,7 +81,7 @@ export const Maschine = ({ start, dauer, nummer, gebaeude, voll }: Maschine) => 
                 <button
                     className={`grow rounded-lg ${laufend || vollWert ? "bg-red-500" : "bg-blue-300"}`}
                     type="submit">
-                    {laufend ? "stop" : vollWert ? "leer" : "start"}
+                    {laufend ? "stop" : vollWert ? "leer machen" : "start"}
                 </button>
             </form>
         </div >
