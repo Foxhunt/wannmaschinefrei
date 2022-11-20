@@ -86,6 +86,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
         'voll': {
           '$first': '$voll'
+        },
+        'typ': {
+          '$first': '$typ'
         }
       }
     }, {

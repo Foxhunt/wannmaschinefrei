@@ -6,9 +6,10 @@ export interface Maschine {
     dauer: number
     gebaeude: string
     voll: boolean
+    typ: string
 }
 
-export const Maschine = ({ start, dauer, nummer, gebaeude, voll }: Maschine) => {
+export const Maschine = ({ start, dauer, nummer, gebaeude, voll, typ }: Maschine) => {
     const [startWert, setStartWert] = useState(start);
     const [dauerWert, setDauerWert] = useState(dauer);
     const ende = startWert + dauerWert * 60 * 1000;
@@ -32,7 +33,7 @@ export const Maschine = ({ start, dauer, nummer, gebaeude, voll }: Maschine) => 
     return (
         <div className={`p-3 rounded shadow-lg ${laufend || vollWert ? "bg-red-300" : "bg-green-300"}`}>
             <p>
-                <span>Maschine {nummer} </span>
+                <span>{typ || "Maschine"} {nummer} </span>
                 {
                     laufend ?
                         <span>
@@ -55,9 +56,10 @@ export const Maschine = ({ start, dauer, nummer, gebaeude, voll }: Maschine) => 
                                 body: JSON.stringify({
                                     nummer,
                                     gebaeude,
+                                    typ,
                                     start: Number(Date.now()),
                                     voll: !vollWert,
-                                    dauer: event.currentTarget.dauer?.valueAsNumber || 0
+                                    dauer: event.currentTarget.dauer?.valueAsNumber || 0,
                                 }),
                                 method: "POST"
                             }

@@ -18,7 +18,7 @@ export default async function handler(
     return;
   }
 
-  const { nummer, start, dauer, gebaeude, voll } = JSON.parse(req.body);
+  const { nummer, start, dauer, gebaeude, voll, typ } = JSON.parse(req.body);
 
   const client = await clientPromise;
 
@@ -32,6 +32,7 @@ export default async function handler(
     dauer,
     gebaeude,
     voll,
+    typ,
   });
 
   res.end();
