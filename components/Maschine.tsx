@@ -31,7 +31,8 @@ export const Maschine = ({ start, dauer, nummer, gebaeude, voll, typ }: Maschine
     const endeZeit = new Date(ende).toLocaleTimeString("de-DE", { timeZone: "Europe/Berlin" }).slice(0, -3)
 
     return (
-        <div className={`p-3 rounded shadow-lg ${laufend || vollWert ? "bg-red-300" : "bg-green-300"}`}>
+        <div className={`p-3 rounded shadow-lg ${laufend ? "bg-red-300" : vollWert ? "bg-orange-200" : "bg-green-300"
+            }`}>
             <p>
                 <span>{typ || "Maschine"} {nummer} </span>
                 {
@@ -81,7 +82,7 @@ export const Maschine = ({ start, dauer, nummer, gebaeude, voll, typ }: Maschine
                     defaultValue={laufend ? "" : 60}
                     placeholder="Dauer" />}
                 <button
-                    className={`grow rounded-lg ${laufend || vollWert ? "bg-red-500" : "bg-blue-300"}`}
+                    className={`grow rounded - lg ${laufend ? "bg-red-500" : vollWert ? "bg-yellow-200" : "bg-blue-300"} `}
                     type="submit">
                     {laufend ? "stop" : vollWert ? "leer machen" : "start"}
                 </button>
