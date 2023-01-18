@@ -19,6 +19,7 @@
     "@types/node": "^18.6.2",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@types/serviceworker": "^0.0.60",
     "autoprefixer": "^10.4.8",
     "eslint": "^8.20.0",
     "eslint-config-next": "^12.3.1",
