@@ -1,22 +1,27 @@
-import type { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
-import { Maschine } from '../components/Maschine';
-import clientPromise from '../lib/mongodb';
+import type { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
+import { useEffect } from "react";
+import { Maschine } from "../components/Maschine";
+import clientPromise from "../lib/mongodb";
 
-const NEXT_PUBLIC_MONGODB_COLLECTION_NAME = process.env.NEXT_PUBLIC_MONGODB_COLLECTION_NAME
+const NEXT_PUBLIC_MONGODB_COLLECTION_NAME =
+  process.env.NEXT_PUBLIC_MONGODB_COLLECTION_NAME;
 
 interface props {
-  maschinen: Maschine[]
+  maschinen: Maschine[];
 }
 
 const Home: NextPage<props> = ({ maschinen }) => {
-  const maschinenB = maschinen?.filter(maschine =>
-    maschine.gebaeude == "b"
-  )
+  const maschinenB = maschinen?.filter((maschine) => maschine.gebaeude == "b");
 
-  const maschinenD = maschinen?.filter(maschine =>
-    maschine.gebaeude == "d"
-  )
+  const maschinenD = maschinen?.filter((maschine) => maschine.gebaeude == "d");
+
+  useEffect(() => {
+    if (!localStorage.getItem("uid")) {
+      const uint32 = window.crypto.getRandomValues(new Uint32Array(1))[0];
+      localStorage.setItem("uid", uint32.toString(16));
+    }
+  }, []);
 
   return (
     <>
@@ -25,86 +30,86 @@ const Home: NextPage<props> = ({ maschinen }) => {
       </Head>
       {maschinenB.length > 0 && <div className="p-3">Gebäude B</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
-        {
-          maschinenB?.map(maschine =>
-            <Maschine key={maschine.nummer} {...maschine} />
-          )
-        }
+        {maschinenB?.map((maschine) => (
+          <Maschine key={maschine.nummer} {...maschine} />
+        ))}
       </div>
       {maschinenD.length > 0 && <div className="p-3">Gebäude D</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
-        {
-          maschinenD?.map(maschine =>
-            <Maschine key={maschine.nummer} {...maschine} />
-          )
-        }
+        {maschinenD?.map((maschine) => (
+          <Maschine key={maschine.nummer} {...maschine} />
+        ))}
       </div>
       <div className="place-content-center">
         <a
           href="mailto:marco@mojica.de?subject=Feedback wannmaschinefrei"
-          className="text-center text-gray-500 text-xs">
+          className="text-center text-gray-500 text-xs"
+        >
           Fragen? Ideen? Schreib mir!
         </a>
       </div>
     </>
-  )
-}
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
-  const collection = client.db("wannmaschinefrei").collection(NEXT_PUBLIC_MONGODB_COLLECTION_NAME!);
+  const collection = client
+    .db("wannmaschinefrei")
+    .collection(NEXT_PUBLIC_MONGODB_COLLECTION_NAME!);
 
   const agg = [
     {
-      '$sort': {
-        'start': -1
-      }
-    }, {
-      '$addFields': {
-        'nummerAsString': {
-          '$toString': '$nummer'
-        }
-      }
-    }, {
-      '$group': {
-        '_id': {
-          '$concat': [
-            '$gebaeude', '$nummerAsString'
-          ]
+      $sort: {
+        start: -1,
+      },
+    },
+    {
+      $addFields: {
+        nummerAsString: {
+          $toString: "$nummer",
         },
-        'nummer': {
-          '$first': '$nummer'
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $concat: ["$gebaeude", "$nummerAsString"],
         },
-        'start': {
-          '$first': '$start'
+        nummer: {
+          $first: "$nummer",
         },
-        'dauer': {
-          '$first': '$dauer'
+        start: {
+          $first: "$start",
         },
-        'gebaeude': {
-          '$first': '$gebaeude'
+        dauer: {
+          $first: "$dauer",
         },
-        'voll': {
-          '$first': '$voll'
+        gebaeude: {
+          $first: "$gebaeude",
         },
-        'typ': {
-          '$first': '$typ'
-        }
-      }
-    }, {
-      '$sort': {
-        'nummer': 1
-      }
-    }
-  ]
+        voll: {
+          $first: "$voll",
+        },
+        typ: {
+          $first: "$typ",
+        },
+      },
+    },
+    {
+      $sort: {
+        nummer: 1,
+      },
+    },
+  ];
 
-  const maschinen = await collection.aggregate(agg).toArray()
+  const maschinen = await collection.aggregate(agg).toArray();
 
   return {
     props: {
-      maschinen
-    }
-  }
-}
+      maschinen,
+    },
+  };
+};
 
-export default Home
+export default Home;
