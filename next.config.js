@@ -9,6 +9,7 @@ const withPWA = require("next-pwa")({
   dest: "public",
   dynamicStartUrl: false,
   cacheStartUrl: false,
+  buildExcludes: ["dynamic-css-manifest.json"],
   runtimeCaching: [
     {
       urlPattern: /\/$/i,
