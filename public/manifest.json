@@ -1,29 +1,42 @@
 {
-    "icons": [
-        {
-            "src": "icon-144.png",
-            "sizes": "144x144",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
-        }
-    ],
-    "name": "Wannmaschinefrei",
-    "short_name": "WMF",
-    "theme_color": "#FFFFFF",
-    "background_color": "#FFFFFF",
-    "start_url": "/",
-    "display": "standalone",
-    "orientation": "portrait"
+  "icons": [
+    {
+      "src": "icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot_mobile.png",
+      "sizes": "750x1334"
+    },
+    {
+      "src": "screenshot_desktop.png",
+      "sizes": "1920x530",
+      "form_factor": "wide"
+    }
+  ],
+  "name": "Wannmaschinefrei",
+  "description": "Wannmaschinefrei hilft dir, die nächste freie Waschmaschine zu finden.",
+  "short_name": "WMF",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait"
 }
