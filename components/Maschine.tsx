@@ -1,3 +1,4 @@
+import { posthog } from "posthog-js";
 import { useEffect, useState } from "react";
 
 export interface Maschine {
@@ -80,6 +81,16 @@ export const Maschine = ({
               uid: localStorage.getItem("uid"),
             }),
             method: "POST",
+          });
+
+          posthog.capture(laufend ? "stop" : vollWert ? "empty" : "start", {
+            nummer,
+            gebaeude,
+            typ,
+            start: Number(Date.now()),
+            voll: !vollWert,
+            dauer: event.currentTarget.dauer?.valueAsNumber || 0,
+            uid: localStorage.getItem("uid"),
           });
 
           setStartWert(Date.now());
